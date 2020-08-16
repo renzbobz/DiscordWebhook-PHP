@@ -50,7 +50,7 @@ $dw->send("#embedId", function($success, $response, $statusCode) {
 $dw->send("#embedId", "WEBHOOK_URL");
 ```
 
-![Preview](images/em_s.jpg);
+![Preview](images/em_s.jpg)
 
 ##### Multiple embed
 ```php
@@ -67,7 +67,7 @@ $dw->push("#embedId", $embed);
 $dw->send("#embedId");
 ```
 
-![Preview](images/em_m.jpg);
+![Preview](images/em_m.jpg)
 
 ## Send plain message
 
