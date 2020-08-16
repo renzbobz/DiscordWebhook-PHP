@@ -86,3 +86,8 @@ $dw->send("#msg");
 ```
 
 ![Preview](images/pm.jpg)
+
+-----
+
+Next update:
+File upload support
