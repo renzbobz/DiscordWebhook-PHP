@@ -38,6 +38,7 @@ $dw->push("#embedId", $embed);
 
 // and finally send it
 $res = dw->send("#embedId");
+
 // $res contains ["success" => boolean, "response" => actual_response_from_discord, "statusCode" => http_code(200)]
 
 // You can also use callback
@@ -45,22 +46,20 @@ $dw->send("#embedId", function($success, $response, $statusCode) {
  // Do something
 });
 
-// and also you can set webhook
-$dw->send("#embedId", "WEBHOOK_URL", function($success, $response, $statusCode) {
-  // Do something
-});
+// and set webhook
+$dw->send("#embedId", "WEBHOOK_URL");
 ```
 
 ##### Multiple embed
 ```php
-$embedLength = 2; // 2 embedded message
+$embedLength = 2; 
 $embed = $dw->embed("#embedId", $embedLength); // 2 object is set
 
 $e1 = $embed[0]; // Access first embed
 $e1["title"] = "Title embed of first embed";
 
 $e2 = $embed[1]; // Access second embed
-$e2["title"] = " "Title embed of second embed";
+$e2["title"] = "Title embed of second embed";
 
 $dw->push("#embedId", $embed);
 
