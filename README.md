@@ -50,6 +50,8 @@ $dw->send("#embedId", function($success, $response, $statusCode) {
 $dw->send("#embedId", "WEBHOOK_URL");
 ```
 
+![Preview](images/em_s.jpg);
+
 ##### Multiple embed
 ```php
 $embed = $dw->embed("#embedId", 2); // 2 object is created and returned
@@ -65,6 +67,8 @@ $dw->push("#embedId", $embed);
 $dw->send("#embedId");
 ```
 
+![Preview](images/em_m.jpg);
+
 ## Send plain message
 
 ##### Shorthand method
@@ -79,3 +83,5 @@ $msg["content"] = "Message here!";
 $dw->push("#msg", $msg);
 $dw->send("#msg");
 ```
+
+![Preview](images/pm.jpg)
