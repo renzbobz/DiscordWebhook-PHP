@@ -79,10 +79,37 @@ $dw->send("Message here!");
 
 ##### Normal method
 ```php
-$msg = dw->embed("#msg");
+$msg = $dw->embed("#msg");
 $msg["content"] = "Message here!";
 $dw->push("#msg", $msg);
 $dw->send("#msg");
 ```
 
 ![Preview](images/pm.jpg)
+
+
+## Remember
+```php
+/*
+  embed() have two arguments
+  1st arg: #id123 (embedId) [required]
+  2nd arg: 3 (embedLength) [optional]
+*/
+$dw->embed(); 
+
+/*
+  push() can have more than 2 arguments
+  1st arg: #id123 (embedId) [required]
+  2nd arg: embedObject1 [required]
+  3rd arg: embedObject2
+*/
+$dw->push();
+
+/*
+  send() have three arguments
+  1st arg: #id123 (embedId) [required]
+  2nd arg: webhook_url [optional]
+  3rd arg: callback [optional]
+*/
+$dw->send();
+```
