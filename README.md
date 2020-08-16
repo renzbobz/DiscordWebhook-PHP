@@ -37,9 +37,9 @@ $embed["color"] = 1752220;
 $dw->push("#embedId", $embed);
 
 // and finally send it
-$res = dw->send("#embedId");
+$res = $dw->send("#embedId");
 
-// $res contains ["success" => boolean, "response" => actual_response_from_discord, "statusCode" => http_code(200)]
+// $res contains ["success" => boolean, "response" => actual_response_from_discord, "statusCode" => 200]
 
 // You can also use callback
 $dw->send("#embedId", function($success, $response, $statusCode) {
