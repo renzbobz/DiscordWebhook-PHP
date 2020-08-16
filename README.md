@@ -52,8 +52,7 @@ $dw->send("#embedId", "WEBHOOK_URL");
 
 ##### Multiple embed
 ```php
-$embedLength = 2; 
-$embed = $dw->embed("#embedId", $embedLength); // 2 object is created and returned
+$embed = $dw->embed("#embedId", 2); // 2 object is created and returned
 
 $e1 = $embed[0]; // Access first embed
 $e1["title"] = "Title embed of first embed";
