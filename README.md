@@ -31,7 +31,7 @@ $embed = $dw->embed("#embedId");
 // and now set what you want
 $embed["title"] = "Title of embed";
 $embed["description"] = "Description of embed";
-$embed["color"] = "";
+$embed["color"] = 1752220;
 
 // then push the embed
 $dw->push("#embedId", $embed);
