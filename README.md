@@ -62,7 +62,8 @@ $e1["title"] = "Title embed of first embed";
 $e2 = $embed[1]; // Access second embed
 $e2["title"] = "Title embed of second embed";
 
-$dw->push("#embedId", $embed);
+// then push them
+$dw->push("#embedId", $e1, $e2);
 
 $dw->send("#embedId");
 ```
