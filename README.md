@@ -17,7 +17,7 @@ new DiscordWebhook("botName");
 new DiscordWebhook("botIcon");
 new DiscordWebhook("WEBHOOK_URL");
 new DiscordWebhook();
-# You can set the webhook later if you a send message
+# You can set the webhook later if you send a message
 ```
 
 ## Send embedded message 
