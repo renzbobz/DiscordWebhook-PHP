@@ -113,3 +113,63 @@ $dw->push();
 */
 $dw->send();
 ```
+
+
+## More examples
+```php
+$icon = "https://www.seekpng.com/png/full/20-205511_discord-transparent-staff-discord-logo-black-and-white.png";
+$image = "https://discord.com/assets/f72fbed55baa5642d5a0348bab7d7226.png";
+$webhook = "WEBHOOK_URL";
+
+$dw = new DiscordWebhook("Discordy", $icon, $webhook);
+
+$embed = $dw->embed("#embedStructure");
+
+$embed = [
+  "content" => "Content above the embed",
+  "title" => "Title of embed",
+  "url" => "https://discordy.site",
+  "description" => "Description of embed",
+  "color" => 1752220,
+  "timestamp" => date("c", time()),
+  "author" => [
+    "name" => "Author name", 
+    "url" => "https://author.site",
+    "icon_url" => $icon
+  ],
+  "thumbnail" => [
+    "url" => $icon
+  ],
+  "image" => [
+    "url" => $image
+  ],
+  "footer" => [
+    "text" => "Footer text",
+    "icon_url" => $icon
+  ],
+  "fields" => [
+    [
+      "name" => "Field 1",
+      "value" => "field 1 value"
+    ],
+    [
+      "name" => "Field 2",
+      "value" => "field 2 value"
+    ],
+    [
+      "name" => "Field 3",
+      "value" => "field 3 value"
+    ]
+  ]
+]; 
+
+$dw->push("#embedStructure", $embed);
+
+$dw->send("#embedStructure", function($success, $res) {
+  echo $res;
+});
+```
+
+![Preview](images/e1.jpg)
+
+
