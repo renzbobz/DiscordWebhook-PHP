@@ -115,7 +115,7 @@ $dw->send();
 ```
 
 
-## More examples
+## More example
 ```php
 $icon = "https://www.seekpng.com/png/full/20-205511_discord-transparent-staff-discord-logo-black-and-white.png";
 $image = "https://discord.com/assets/f72fbed55baa5642d5a0348bab7d7226.png";
