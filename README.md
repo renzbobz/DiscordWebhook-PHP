@@ -72,17 +72,8 @@ $dw->send("#embedId");
 
 ## Send plain message
 
-##### Shorthand method
 ```php
-$dw->send("Message here!");
-```
-
-##### Normal method
-```php
-$msg = $dw->embed("#msg");
-$msg["content"] = "Message here!";
-$dw->push("#msg", $msg);
-$dw->send("#msg");
+$dw->send("Message here!", "WEBHOOK_HERE_OPTIONAL");
 ```
 
 ![Preview](images/pm.jpg)
@@ -96,51 +87,20 @@ $webhook = "WEBHOOK_URL";
 
 $dw = new DiscordWebhook("Discordy", $icon, $webhook);
 
-$embed = $dw->embed("#embedStructure");
-
-$embed = [
-  "content" => "Content above the embed",
-  "title" => "Title of embed",
-  "url" => "https://discordy.site",
-  "description" => "Description of embed",
-  "color" => 1752220,
-  "timestamp" => date("c", time()),
-  "author" => [
-    "name" => "Author name", 
-    "url" => "https://author.site",
-    "icon_url" => $icon
-  ],
-  "thumbnail" => [
-    "url" => $icon
-  ],
-  "image" => [
-    "url" => $image
-  ],
-  "footer" => [
-    "text" => "Footer text",
-    "icon_url" => $icon
-  ],
-  "fields" => [
-    [
-      "name" => "Field 1",
-      "value" => "field 1 value"
-    ],
-    [
-      "name" => "Field 2",
-      "value" => "field 2 value"
-    ],
-    [
-      "name" => "Field 3",
-      "value" => "field 3 value"
-    ]
-  ]
-]; 
-
-$dw->push("#embedStructure", $embed);
-
-$dw->send("#embedStructure", function($success, $res) {
-  echo $res;
-});
+$dw->newEmbed()
+->setContent("Content above the embed")
+->setTitle("Title of embed", "https://discordy.site")
+->setDescription("Description of embed")
+->setColor(1752220)
+->setTimestamp(date("c", time()))
+->setAuthor("Author name", "https://author.site", $icon)
+->setImage($image)
+->setThumbnail($icon)
+->setFooter("Footer text", $icon)
+->addField("Field 1", "field 1 value")
+->addField("Field 2", "field 2 value")
+->addField("Field 3", "field 3 value")
+->send();
 ```
 
 ![Preview](images/e1.jpg)
