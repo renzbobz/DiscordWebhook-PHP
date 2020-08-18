@@ -1,7 +1,7 @@
-# DiscordWebhook-PHP
+# DiscordWebhook-PHP (New)
 Easily send embedded/plain message.
 
-Coded on phone - 8/16/20
+Coded on phone - 8/18/20
 
 # Usage
 Include `DiscordWebhook.php` to your project then 
