@@ -43,6 +43,19 @@ $dw->send("Message here!", "WEBHOOK_HERE_OPTIONAL");
 ![Preview](images/pm.jpg)
 
 
+### You can also do this
+```php
+# Make your embed
+$embed = $dw->newEmbed()
+->title("Hello discord!");
+
+# Then send it when you're ready
+if ($ready) {
+  $embed->send();
+}
+```
+
+
 ## More example
 ```php
 $icon = "https://www.seekpng.com/png/full/20-205511_discord-transparent-staff-discord-logo-black-and-white.png";
