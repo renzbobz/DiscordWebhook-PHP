@@ -11,10 +11,10 @@ $dw = new DiscordWebhook("botName", "botAvatar.jpg", "WEBHOOK_URL");
 ```
 You can also do this
 ```php
-new DiscordWebhook("botName", "botAvatar");
+new DiscordWebhook("botName", "botAvatar.jpg");
 new DiscordWebhook("botName", "WEBHOOK_URL");
 new DiscordWebhook("botName");
-new DiscordWebhook("botIcon");
+new DiscordWebhook("botAvatar.jpg");
 new DiscordWebhook("WEBHOOK_URL");
 new DiscordWebhook();
 # You can set the webhook later if you send a message
