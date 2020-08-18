@@ -29,7 +29,7 @@ $res = $dw->newEmbed()
 ->setColor(1752220)
 ->send("WEBHOOK_HERE_OPTIONAL");
 
-# $res contains ["success" => boolean, "response" => actual_response, "code" => 200]
+# $res contains ["success" => boolean, "response" => actuall_response, "code" => 200]
 ```
 
 ![Preview](images/em_s.jpg)
