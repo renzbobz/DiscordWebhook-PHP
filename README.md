@@ -23,11 +23,13 @@ new DiscordWebhook();
 ## Send embedded message 
 
 ```php
-$dw->newEmbed()
+$res = $dw->newEmbed()
 ->setTitle("Title of embed")
 ->setDescription ("Description of embed")
 ->setColor(1752220)
-->send();
+->send("WEBHOOK_HERE_OPTIONAL");
+
+# $res contains ["success" => boolean, "response" => actual_response, "code" => 200]
 ```
 
 ![Preview](images/em_s.jpg)
