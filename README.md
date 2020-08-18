@@ -47,7 +47,7 @@ $dw->send("Message here!", "WEBHOOK_HERE_OPTIONAL");
 ```php
 # Make your embed
 $embed = $dw->newEmbed()
-->title("Hello discord!");
+->setTitle("Hello discord!");
 
 # Then send it when you're ready
 if ($ready) {
