@@ -3,14 +3,12 @@
 
 class DiscordWebhook {
   
-  
+
   # DiscordWebhook (New)
   # github.com/renzbobz
   # 8/18/20
   
-  
-  public $fields = [];
-  
+
   public function __construct() {
    
     $args = func_get_args();
