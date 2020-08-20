@@ -44,6 +44,7 @@ $dw->send("Message here!", "WEBHOOK_HERE_OPTIONAL");
 
 
 ### You can also do this
+Send embed when ready
 ```php
 # Make your embed
 $embed = $dw->newEmbed()
@@ -54,7 +55,21 @@ if ($ready) {
   $embed->send();
 }
 ```
+Create more than one embed
+```php
+$embed = $dw->newEmbed()
+->setTitle("Embed 1")
+->send();
 
+$embed2 = $dw->newEmbed()
+->setTitle("Embed 2");
+
+$embed3 = $dw->newEmbed()
+->setTitle("Embed 3");
+
+$embed2->send();
+$embed3->send();
+```
 
 ## More example
 ```php
