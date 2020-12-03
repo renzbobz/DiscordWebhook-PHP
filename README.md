@@ -11,7 +11,7 @@ You can now get the array data of the embed
 ```php
 $data = $embed->getData();
 ```
-And this will now automatically encoded to json format and it's already unicode and slashes unescaped
+And this will now automatically encoded to json format
 ```php
 echo $embed; // outputs data in json format
 ```
