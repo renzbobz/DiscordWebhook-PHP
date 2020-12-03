@@ -100,7 +100,57 @@ $embed2->send();
 $embed3->send();
 ```
 
-## More example
+## Methods
+— Content
+```php
+$embed->setContent(<text>);
+```
+— Author
+```php
+$embed->setAuthor(<name>[, <url>, <icon> ]);
+```
+— Title
+```php
+$embed->setTitle(<title>[, <url> ]);
+```
+— Description
+```php
+$embed->setDescription(<description>);
+```
+— Color
+```php
+$embed->setColor(<color_in_decimal>);
+```
+— Thumbnail
+```php
+$embed->setThumbnail(<thumbnail_url>[, <width>, <height>);
+```
+— Image
+```php
+$embed->setImage(<image_url>[, <width>, <height>);
+```
+— Timestamp
+```php
+$embed->setTimestamp(<time>);
+```
+— Footer
+```php
+$embed->setFooter(<text>[, <icon> ]);
+```
+— Field
+```php
+$embed->addField(<title>, <value>[, <inline> ]);
+```
+— Send
+```php
+$embed->send([ message||webhook ]);
+```
+— Get Data
+```php
+$embed->getData();
+```
+
+## Examples
 ```php
 $icon = "https://www.seekpng.com/png/full/20-205511_discord-transparent-staff-discord-logo-black-and-white.png";
 $image = "https://discord.com/assets/f72fbed55baa5642d5a0348bab7d7226.png";
