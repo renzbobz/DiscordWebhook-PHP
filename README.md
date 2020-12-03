@@ -11,7 +11,7 @@ You can now get the array data of the embed
 ```php
 $data = $embed->getData();
 ```
-And this will now automatically encoded to json format and it's already unescaped slashes and unicode
+And this will now automatically encoded to json format and it's already slashes and unicode unescaped
 ```php
 echo $embed; // outputs data in json format
 ```
@@ -23,7 +23,7 @@ curl_setopt_array($ch, [
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_FOLLOWLOCATION => true,
   CURLOPT_POST => true,
-  CURLOPT_POSTFIELDS => $embed // No need to json_encode, this will automatically format to json
+  CURLOPT_POSTFIELDS => $embed // No need to json_encode, this will automatically formated to json
 ]);
 $res = curl_exec($ch);
 curl_close($ch);
