@@ -103,11 +103,11 @@ $embed3->send();
 ## Methods
 — Content
 ```php
-$embed->setContent(<text>);
+$embed->setContent(<message>);
 ```
 — Author
 ```php
-$embed->setAuthor(<name>[, <url>, <icon> ]);
+$embed->setAuthor(<name>[, <url>[, <icon_url> ]]);
 ```
 — Title
 ```php
@@ -119,27 +119,27 @@ $embed->setDescription(<description>);
 ```
 — Color
 ```php
-$embed->setColor(<color_in_decimal>);
+$embed->setColor(<color>);
 ```
 — Thumbnail
 ```php
-$embed->setThumbnail(<thumbnail_url>[, <width>, <height>);
+$embed->setThumbnail(<url>[, <height>[, <width> ]]);
 ```
 — Image
 ```php
-$embed->setImage(<image_url>[, <width>, <height>);
+$embed->setImage(<url>[, <height>[, <width> ]]);
 ```
 — Timestamp
 ```php
-$embed->setTimestamp(<time>);
+$embed->setTimestamp(<timestamp>);
 ```
 — Footer
 ```php
-$embed->setFooter(<text>[, <icon> ]);
+$embed->setFooter(<text>[, <icon_url> ]);
 ```
 — Field
 ```php
-$embed->addField(<title>, <value>[, <inline> ]);
+$embed->addField(<name>, <value>[, <inline> ]);
 ```
 — Send
 ```php
