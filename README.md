@@ -2,6 +2,34 @@
 Easily send embedded/plain message.
 
 Coded on phone - 8/18/20
+Updated - 12/03/20
+
+# New update v.2
+### What's new?
+You can now get the array data of the embed
+```php
+$data = $embed->getData();
+```
+And this will now automatically encoded to json format and it's already unescaped slashes and unicode
+```php
+echo $embed; // outputs data in json format
+```
+You can now also make your own request
+```php
+$ch = curl_init($webhook);
+curl_setopt_array($ch, [
+  CURLOPT_HTTPHEADER => ['Content-type: application/json'],
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_POST => true,
+  CURLOPT_POSTFIELDS => $embed // No need to json_encode, this will automatically format to json
+]);
+$res = curl_exec($ch);
+curl_close($ch);
+// display result
+echo $res; 
+```
+
 
 # Usage
 Include `DiscordWebhook.php` to your project then 
