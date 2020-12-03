@@ -95,16 +95,20 @@ class DiscordWebhook {
     return $this;
   }
 
-  public function setThumbnail($url) {
+  public function setThumbnail($url, $height=0, $width=0) {
     $this->thumbnail = [
-      'url' => $url
+      'url' => $url,
+      'height' => $height,
+      'width' => $width
     ];
     return $this;
   }
   
-  public function setImage($url) {
+  public function setImage($url, $height=0, $width=0) {
     $this->image = [
-      'url' => $url
+      'url' => $url,
+      'height' => $height,
+      'width' => $width
     ];
     return $this;
   }
@@ -126,9 +130,8 @@ class DiscordWebhook {
     return $this;
   }
   
-  public function getData() {
+  public function getData($args=[]) {
     
-    $args = func_get_args();
     $length = count($args);
     $objs = get_object_vars($this);
     
@@ -150,7 +153,7 @@ class DiscordWebhook {
       
     } else if ($length == 1) {
       if (preg_match('/webhooks/', $args[0])) {
-        $webhook = $args[0];
+        $this->webhook = $args[0];
       } else {
         $nm = false;
         $data['content'] = $args[0];
@@ -173,7 +176,8 @@ class DiscordWebhook {
   
   public function send() {
     
-    $data = $this->getData();
+    $args = func_get_args();
+    $data = $this->getData($args);
     $webhook = $this->webhook;
     
     if (!$data['content'] && !$data['embeds']) throw new Exception('UNABLE TO SEND: Empty message.');
