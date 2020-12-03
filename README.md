@@ -143,7 +143,7 @@ $embed->addField(<name>, <value>[, <inline> ]);
 ```
 — Send
 ```php
-$embed->send([ message||webhook ]);
+$embed->send([ message|webhook ]);
 ```
 — Get Data
 ```php
