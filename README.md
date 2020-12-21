@@ -7,7 +7,7 @@ Updated - 12/21/20
 
 # New update v.2.5
 ### What's new?
-You can now append or prepend to title, description, and content.
+You can now append or prepend to title, description, or content.
 ```php
 $points = 5;
 $embed->setTitle("You've won the game!");
