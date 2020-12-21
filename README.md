@@ -8,8 +8,23 @@ Updated - 12/21/20
 # New update v.2.5
 ### What's new?
 You can now append or prepend to title, description, and content.
+```php
+$points = 5;
+$embed->setTitle("You've won the game!");
+$pointsAdded = $db->query("UPDATE users SET points = points + $points WHERE user_id = 1");
+if ($pointsAdded) $embed->appendTitle("\nYou've earned $points points!");
+/*
+  You've won the game!
+  You've earned 5 points!
+*/
+$embed->prependTitle("🎉 ");
+/*
+  🎉 You've won the game!
+  You've earned 5 points!
+*/
+```
 
-# New update v.2 (12/03/20)
+## New update v.2 (12/03/20)
 ### What's new?
 You can now get the array data of the embed
 ```php
@@ -107,7 +122,9 @@ $embed3->send();
 ## Methods
 — Content
 ```php
-$embed->setContent(<message>);
+$embed->setContent(<message>)
+->appendContent(<message>)
+->prependContent(<message>);
 ```
 — Author
 ```php
@@ -115,11 +132,15 @@ $embed->setAuthor(<name>[, <url>[, <icon_url> ]]);
 ```
 — Title
 ```php
-$embed->setTitle(<title>[, <url> ]);
+$embed->setTitle(<title>[, <url> ])
+->appendTitle(<title>)
+->prependTitle(<title>);
 ```
 — Description
 ```php
-$embed->setDescription(<description>);
+$embed->setDescription(<description>)
+->appendDescription(<description>)
+->prependDescription(<description>);
 ```
 — Color
 ```php
