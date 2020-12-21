@@ -1,11 +1,15 @@
-# DiscordWebhook-PHP (New)
+# DiscordWebhook-PHP
 Easily send embedded/plain message.
 
 Coded on phone - 8/18/20
 
-Updated - 12/03/20
+Updated - 12/21/20
 
-# New update v.2
+# New update v.2.5
+### What's new?
+You can now append or prepend to title, description, and content.
+
+# New update v.2 (12/03/20)
 ### What's new?
 You can now get the array data of the embed
 ```php
