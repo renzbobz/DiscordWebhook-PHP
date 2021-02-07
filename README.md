@@ -28,6 +28,7 @@ $res = $dw->sendMultiEmbed($e,$e2,$e3);
 
 print_r($res);
 ```
+![Preview](images/multi-embed.jpg)
 
 ## New update v.2.5 (12/21/20)
 ### What's new?
