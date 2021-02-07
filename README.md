@@ -3,9 +3,33 @@ Easily send embedded/plain message.
 
 Coded on phone - 8/18/20
 
-Updated - 12/21/20
+Updated - 2/7/21
 
-# New update v.2.5
+# New update v.3
+### What's new?
+You can now send multiple embed. Like chaining embed? 😅
+```php
+$dw = new DiscordWebhook($webhook);
+
+$e = $dw->newEmbed()
+  ->setTitle("Embed")
+  ->setDescription("This is embed #1");
+  
+$e2 = $dw->newEmbed()
+  ->setTitle("Embed 2")
+  ->setDescription("This is embed #2");
+  
+$e3 = $dw->newEmbed()
+  ->setTitle("Embed 3")
+  ->setDescription("This is embed #3");
+  
+$res = $dw->sendMultiEmbed($e,$e2,$e3);
+// or $dw->sendMultiEmbed($webhook,$e,$e2,$e3);
+
+print_r($res);
+```
+
+## New update v.2.5 (12/21/20)
 ### What's new?
 You can now append or prepend to title, description, or content.
 ```php
@@ -173,6 +197,10 @@ $embed->send([ message|webhook ]);
 — Get Data
 ```php
 $embed->getData();
+```
+— Send Multiple Embed
+```php
+$dw->sendMultiEmbed([webhook,]<embed>,<embed2>,...);
 ```
 
 ## Examples
