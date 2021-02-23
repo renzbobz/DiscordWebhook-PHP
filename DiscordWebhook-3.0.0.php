@@ -219,60 +219,7 @@ class DiscordWebhook {
   }
   
   
-  public function sendMultiEmbed() {
-    
-    $args = func_get_args();
-    $length = count($args);
-    
-    if (!$length) return false;
-    
-    $webhook = is_object($args[0]) ? $this->webhook : $args[0];
-    
-    if (!$webhook) throw new Exception('UNABLE TO SEND: Webhook is not set.');
-    
-    $embeds = [];
-    foreach ($args as $arg) {
-      if (!is_object($arg)) continue;
-      $data = $arg->getData();
-      $content = $data["content"];
-      $embeds[] = $data["embeds"][0];
-    }
-    
-    $data = [
-      "content" => $content,
-      "username" => $this->botName,
-      "avatar_url" => $this->botIcon,
-      "embeds" => $embeds
-    ];
-    
-    $ch = curl_init($webhook);
-    curl_setopt_array($ch, [
-      CURLOPT_HTTPHEADER => ['Content-type: application/json'],
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_FOLLOWLOCATION => true,
-      CURLOPT_POST => true,
-      CURLOPT_POSTFIELDS => json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
-    ]);
-    $res = curl_exec($ch);
-    $statusCode = curl_getinfo($ch)['http_code'];
-    curl_close($ch);
-    
-    $success = $statusCode == 204;
-    
-    return [
-      'success' => $success, 
-      'response' => $res, 
-      'statusCode' => $statusCode
-    ];
-    
-  }
-  
-  
-  public function send() {
-    
-    $args = func_get_args();
-    $data = $this->getData($args);
-    $webhook = $this->webhook;
+  private function _send($webhook, $data) {
     
     if (!$data['content'] && !$data['embeds']) throw new Exception('UNABLE TO SEND: Empty message.');
     
@@ -297,6 +244,46 @@ class DiscordWebhook {
       'response' => $res, 
       'statusCode' => $statusCode
     ];
+    
+  }
+  
+  
+  public function sendMultiEmbed() {
+    
+    $args = func_get_args();
+    $length = count($args);
+    
+    if (!$length) return false;
+    
+    $webhook = is_object($args[0]) ? $this->webhook : $args[0];
+    
+    $embeds = [];
+    foreach ($args as $arg) {
+      if (!is_object($arg)) continue;
+      $data = $arg->getData();
+      $content = $data["content"];
+      $embeds[] = $data["embeds"][0];
+    }
+    
+    $data = [
+      "content" => $content,
+      "username" => $this->botName,
+      "avatar_url" => $this->botIcon,
+      "embeds" => $embeds
+    ];
+    
+    return $this->_send($webhook, $data);
+    
+  }
+  
+  
+  public function send() {
+    
+    $args = func_get_args();
+    $data = $this->getData($args);
+    $webhook = $this->webhook;
+    
+    return $this->_send($webhook, $data);
     
   }
   
