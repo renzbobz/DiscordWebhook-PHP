@@ -20,30 +20,37 @@ class DiscordWebhook {
     
     $webhook; $botName; $botIcon;
     
-    if ($length == 3) {
-      $webhook = $args[2];
-      $botIcon = $args[1];
-      $botName = $args[0];
-      
-    } else if ($length == 2) {
-      $botName = $args[0];
-      if (preg_match('/discord.com\/api\/webhooks/', $args[1])) {
-        $webhook = $args[1];
-      } else {
+    switch ($length) {
+      case 3: {
+        
+        $webhook = $args[2];
         $botIcon = $args[1];
-      }
-      
-    } else {
-      $arg = $args[0];
-      $url = parse_url($arg);
-      if (preg_match('/discord.com\/api\/webhooks/', $arg)) {
-        $webhook = $arg;
-      } else if ($url['host']) {
-        $botIcon = $arg;
-      } else {
-        $botName = $arg;
-      }
-      
+        $botName = $args[0];
+        
+      }; break;
+      case 2: {
+        
+        $botName = $args[0];
+        if ($this->isDiscordWebhook($args[1])) {
+          $webhook = $args[1];
+        } else {
+          $botIcon = $args[1];
+        }
+        
+      }; break;
+      case 1: {
+        
+        $arg = $args[0];
+        $url = parse_url($arg);
+        if ($this->isDiscordWebhook($args)) {
+          $webhook = $arg;
+        } else if ($url['host']) {
+          $botIcon = $arg;
+        } else {
+          $botName = $arg;
+        }
+        
+      }; break;
     }
     
     $this->botName = $botName;
@@ -190,34 +197,42 @@ class DiscordWebhook {
     if ($botName) $data['username'] = $botName;
     if ($botIcon) $data['avatar_url'] = $botIcon;
    
-    if ($length == 2) {
-      $nm = false;
-      $data['content'] = $args[0];
-      $this->webhook = $args[1];
-      
-    } else if ($length == 1) {
-      if (preg_match('/discord.com\/api\/webhooks/', $args[0])) {
-        $this->webhook = $args[0];
-      } else {
+    switch ($length) {
+      case 2: {
+        
         $nm = false;
         $data['content'] = $args[0];
-      }
+        $this->webhook = $args[1];
+        
+      }; break;
+      case 1: {
+        
+        if ($this->isDiscordWebhook($args[0])) {
+          $this->webhook = $args[0];
+        } else {
+          $nm = false;
+          $data['content'] = $args[0];
+        }
+        
+      }; break;
     }
     
-    if ($nm) 
+    if ($nm) {
       foreach ($objs as $k => $v) {
-        if ($k == 'botName') continue;
-        if ($k == 'botIcon') continue;
-        if ($k == 'webhook') continue;
-        if ($k == 'content') continue;
+        $exs = ['botName', 'botIcon', 'webhook', 'content'];
+        if (in_array($k, $exs)) continue;
         $data['embeds'][0][$k] = $v;
       }
-    
+    }
     
     return $data;
     
   }
   
+  public function isDiscordWebhook($url) {
+    $regex = '/(discord.com|discordapp.com)\/api\/webhooks\/(\d+)\/(.*)/';
+    return preg_match($regex, $url);
+  }
   
   private function _send($webhook, $data) {
     
