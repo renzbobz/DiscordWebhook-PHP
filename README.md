@@ -3,7 +3,7 @@ Easily send embedded/plain message.
 
 Coded on phone - 8/18/20
 
-Updated - 2/7/21
+Updated - 2/26/21
 
 # New update v.3
 ### What's new?
@@ -202,6 +202,10 @@ $embed->getData();
 — Send Multiple Embed
 ```php
 $dw->sendMultiEmbed([webhook,]<embed>,<embed2>,...);
+```
+— Validate
+```php
+$dw->isDiscordWebhook(<url>);
 ```
 
 ## Examples
