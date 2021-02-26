@@ -7,7 +7,7 @@ class DiscordWebhook {
   # github.com/renzbobz
   # 8/18/20
   
-  # Updated: 2/7/21
+  # Updated: 2/26/21
   
   
   public function __construct() {
