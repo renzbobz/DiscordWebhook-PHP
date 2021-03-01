@@ -42,7 +42,7 @@ class DiscordWebhook {
         
         $arg = $args[0];
         $url = parse_url($arg);
-        if ($this->isDiscordWebhook($args)) {
+        if ($this->isDiscordWebhook($arg)) {
           $webhook = $arg;
         } else if ($url['host']) {
           $botIcon = $arg;
