@@ -24,6 +24,9 @@ $dw->setTimestamp();
 You can now set text-to-speech
 ```php
 $embed->setTts(true);
+// FOR PLAIN MESSAGE
+$tts = true;
+$dw->send("Message.", $tts);
 ```
 You can now insert field in any index you desired
 ```php
@@ -171,11 +174,27 @@ $embed3->send();
 ```
 
 ## Methods
+— Set bot username
+```php
+$dw->setUsername(<username>);
+```
+— Set bot avatar
+```php
+$dw->setAvatar(<avatar>);
+```
+— Set webhook
+```php
+$dw->setWebhook(<webhook>);
+```
 — Content
 ```php
 $embed->setContent(<message>)
 ->appendContent(<message>)
 ->prependContent(<message>);
+```
+— Text to speech
+```php
+$embed->setTts(<tts:boolean>);
 ```
 — Author
 ```php
