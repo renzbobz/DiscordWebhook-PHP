@@ -3,9 +3,64 @@ Easily send embedded/plain message.
 
 Coded on phone - 8/18/20
 
-Updated - 2/26/21
+Updated - 3/9/21
 
-# New update v.3
+
+# New update! v.4
+### What's new?
+Set default values
+```php
+$dw = new DiscordWebhook();
+$dw->setUsername("Bot name");
+$dw->setAvatar("avatar.jpg");
+$dw->setWebhook("...");
+// OR
+$dw = new DiscordWebhook("Bot name", "avatar.jpg", "...");
+
+$dw->setAuthor("Renz");
+// This will now automatically set to current timestamp if you don't pass one
+$dw->setTimestamp();
+```
+You can now set text-to-speech
+```php
+$embed->setTts(true);
+```
+You can now insert field in any index you desired
+```php
+$index = 2;
+$embed->addField($name, $value, $inline, $index);
+```
+You can now insert embed into another embed
+```php
+$embed = $dw->newEmbed()
+ ->setTitle("First!");
+/*
+@ $embed
+ "embeds" => [
+  0 => [
+   "title" => "First!"
+  ]
+ ];
+*/
+$dw->newEmbed()
+ ->setTitle("Second!")
+ ->insertTo($embed);
+/*
+@ $embed
+ "embeds" => [
+  0 => [
+   "title" => "First!"
+  ],
+  1 => [
+   "title" => "Second!"
+  ]
+ ];
+$embed->send();
+*/
+```
+So it's same on v.3(multiple embed) but it's now simplified
+
+## New update v.3 (2/26/21)
 ### What's new?
 You can now send multiple embed. Like chaining embed? 😅
 ```php
