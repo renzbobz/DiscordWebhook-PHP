@@ -6,7 +6,7 @@ Coded on phone - 8/18/20
 Updated - 3/9/21
 
 
-# New update! v.4
+# New update! v.3.5
 ### What's new?
 Set default values
 ```php
@@ -30,35 +30,6 @@ You can now insert field in any index you desired
 $index = 2;
 $embed->addField($name, $value, $inline, $index);
 ```
-You can now insert embed into another embed
-```php
-$embed = $dw->newEmbed()
- ->setTitle("First!");
-/*
-@ $embed
- "embeds" => [
-  0 => [
-   "title" => "First!"
-  ]
- ];
-*/
-$dw->newEmbed()
- ->setTitle("Second!")
- ->insertTo($embed);
-/*
-@ $embed
- "embeds" => [
-  0 => [
-   "title" => "First!"
-  ],
-  1 => [
-   "title" => "Second!"
-  ]
- ];
-$embed->send();
-*/
-```
-So it's same on v.3(multiple embed) but it's now simplified
 
 ## New update v.3 (2/26/21)
 ### What's new?
