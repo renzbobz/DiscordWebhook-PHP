@@ -214,7 +214,7 @@ $embed->setDescription(<description>)
 ```
 — Color
 ```php
-$embed->setColor(<color>);
+$embed->setColor([color]);
 ```
 — Thumbnail
 ```php
@@ -226,7 +226,7 @@ $embed->setImage(<url>[, <height>[, <width> ]]);
 ```
 — Timestamp
 ```php
-$embed->setTimestamp(<timestamp>);
+$embed->setTimestamp([timestamp]);
 ```
 — Footer
 ```php
@@ -238,7 +238,7 @@ $embed->addField(<name>, <value>[, <inline> ]);
 ```
 — Send
 ```php
-$embed->send([ message|webhook ]);
+$embed->send([ <message|webhook> ][, <webhook|tts> ][, <tts> ]);
 ```
 — Get Data
 ```php
