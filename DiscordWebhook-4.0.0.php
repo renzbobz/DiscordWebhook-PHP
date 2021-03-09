@@ -3,7 +3,7 @@
 class DiscordWebhook {
   
   
-  # DiscordWebhook v.4.0
+  # DiscordWebhook v.3.5
   # github.com/renzbobz
   # 8/18/20
   
