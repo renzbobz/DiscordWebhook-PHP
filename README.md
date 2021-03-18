@@ -1,282 +1,238 @@
 # DiscordWebhook-PHP
-Easily send embedded/plain message.
+Easily send a message to discord with embeds or files.
 
-Coded on phone - 8/18/20
+Released: **3/18/21**
 
-Updated - 3/9/21
+Updated: **---**
 
 
-# New update! v.3.5
-### What's new?
-Set default values
-```php
-$dw = new DiscordWebhook();
-$dw->setUsername("Bot name");
-$dw->setAvatar("avatar.jpg");
-$dw->setWebhook("...");
-// OR
-$dw = new DiscordWebhook("Bot name", "avatar.jpg", "...");
+> *With built in [DiscordEmbed-PHP](https://github.com/renzbobz/DiscordEmbed-PHP) for creating embed object easily :D*
 
-$dw->setAuthor("Renz");
-// This will now automatically set to current timestamp if you don't pass one
-$dw->setTimestamp();
-```
-You can now set text-to-speech
-```php
-$embed->setTts(true);
-// FOR PLAIN MESSAGE
-$tts = true;
-$dw->send("Message.", $tts);
-```
-You can now insert field in any index you desired
-```php
-$index = 2;
-$embed->addField($name, $value, $inline, $index);
-```
 
-## New update v.3 (2/26/21)
-### What's new?
-You can now send multiple embed. Like chaining embed? 😅
+## Getting started
+
+### Installation
+Download the DiscordWebhook.php file and then require it to your project and you're ready to go!
+
+### Usage
+Create new instance and set your desired values.
 ```php
 $dw = new DiscordWebhook($webhook);
-
-$e = $dw->newEmbed()
-  ->setTitle("Embed")
-  ->setDescription("This is embed #1");
-  
-$e2 = $dw->newEmbed()
-  ->setTitle("Embed 2")
-  ->setDescription("This is embed #2");
-  
-$e3 = $dw->newEmbed()
-  ->setTitle("Embed 3")
-  ->setDescription("This is embed #3");
-  
-$res = $dw->sendMultiEmbed($e,$e2,$e3);
-// or $dw->sendMultiEmbed($webhook,$e,$e2,$e3);
-
-print_r($res);
+# or
+$dw = new DiscordWebhook($options);
 ```
-![Preview](images/multi-embed.jpg)
+#### Options
 
-## New update v.2.5 (12/21/20)
-### What's new?
-You can now append or prepend to title, description, or content.
+| Name          | Property name   | Type       | Default  | Description                     |
+| ------------- |:---------------:|:----------:|:--------:| -------------------------------:|
+| username      | username        | string     |          | Bot name                        |
+| avatar        | avatar_url      | string     |          | Bot avatar url                  |
+| webhook       | webhook         | string     |          | Discord webhook url             |
+| wait_message  | wait_message    | boolean    | true     | Wait for message to be sent     |
+
+### Create new message
+#### Plain message
 ```php
-$points = 5;
-$embed->setTitle("You've won the game!");
-$pointsAdded = $db->query("UPDATE users SET points = points + $points WHERE user_id = 1");
-if ($pointsAdded) $embed->appendTitle("\nYou've earned $points points!");
+$msg = $dw->newMessage("Hello");
+# or
+$msg = $dw->newMessage()
+  ->setContent("Hello");
+$res = $msg->send();
+```
+![Plain message preview](images/image0.jpg)
+#### With embed
+```php
+$msg = $dw->newMessage()
+  ->setContent("Hello")
+  ->setTitle("Cool title")
+  ->setDescription("Cool description");
+$res = $msg->send();
+```
+![Message with embed preview](images/image1.jpg)
+> For more information about the embed, please look at [DiscordEmbed-PHP](https://github.com/renzbobz/DiscordEmbed-PHP).
+
+#### With file
+```php
+$msg = $dw->newMessage()
+  ->setContent("Hello")
+  ->setTitle("Cool title")
+  ->setDescription("Cool description")
+  ->addFile("file0.txt")
+  ->addFile("image.png", "Cool_name.png");
+$res = $msg->send();
+```
+![Message with file preview](images/image2.jpg)
+
+
+### Response object
+| Name       | Value        | Description                                                |
+| ---------- |:------------:|:----------------------------------------------------------:|
+| success    | boolean      | Return's true if response code is in range between 200-299 |
+| body       | string       | Response body                                              |
+| code       | number       | Response code                                              |
+| message    | object       | Return's the message object if successfully sent           |
+
+
+You can also set the default values for your upcoming messages.
+```php 
+$dw->setColor("ffffff");
+$msg = $dw->newMessage()
+  ->setTitle("Cool title")
+  ->setDescription("Cool description");
+$msg2 = $dw->newMessage()
+  ->setTitle("Cool title 2")
+  ->setDescription("Cool description 2");
 /*
-  You've won the game!
-  You've earned 5 points!
-*/
-$embed->prependTitle("🎉 ");
-/*
-  🎉 You've won the game!
-  You've earned 5 points!
+# No need to set the color again if you want the default value
+$msg = $dw->newMessage()
+  ->setColor("ffffff")
+  ->setTitle("Cool title")
+  ->setDescription("Cool description");
 */
 ```
 
-## New update v.2 (12/03/20)
-### What's new?
-You can now get the array data of the embed
+
+## Features
+### Url
+Every url is path ready so it means that you can just pass the file path and it resolves to complete url.
+
+Example:
 ```php
-$data = $embed->getData();
-```
-And this will now automatically encoded to json format
-```php
-echo $embed; // outputs data in json format
-```
-You can now also make your own request
-```php
-$ch = curl_init($webhook);
-curl_setopt_array($ch, [
-  CURLOPT_HTTPHEADER => ['Content-type: application/json'],
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_POST => true,
-  CURLOPT_POSTFIELDS => $embed // No need to json_encode, this will automatically formatted to json
-]);
-$res = curl_exec($ch);
-curl_close($ch);
-// display result
-echo $res; 
-```
-
-
-# Usage
-Include `DiscordWebhook.php` to your project then 
-create an instance of the class.
-```php
-$dw = new DiscordWebhook("botName", "botAvatar.jpg", "WEBHOOK_URL");
-```
-You can also do this
-```php
-new DiscordWebhook("botName", "botAvatar.jpg");
-new DiscordWebhook("botName", "WEBHOOK_URL");
-new DiscordWebhook("botName");
-new DiscordWebhook("botAvatar.jpg");
-new DiscordWebhook("WEBHOOK_URL");
-new DiscordWebhook();
-# You can set the webhook later if you send a message
-```
-
-## Send embedded message 
-
-```php
-$res = $dw->newEmbed()
-->setTitle("Title of embed")
-->setDescription ("Description of embed")
-->setColor(1752220)
-->send("WEBHOOK_HERE_OPTIONAL");
-
-# $res contains ["success" => boolean, "response" => actuall_response, "code" => status_code]
-```
-
-![Preview](images/em_s.jpg)
-
-## Send plain message
-
-```php
-$dw->send("Message here!", "WEBHOOK_HERE_OPTIONAL");
-```
-
-![Preview](images/pm.jpg)
-
-
-### You can also do this
-Send embed when ready
-```php
-# Make your embed
-$embed = $dw->newEmbed()
-->setTitle("Hello discord!");
-
-# Then send it when you're ready
-if ($ready) {
-  $embed->send();
-}
-```
-Create more than one embed
-```php
-$embed = $dw->newEmbed()
-->setTitle("Embed 1")
-->send();
-
-$embed2 = $dw->newEmbed()
-->setTitle("Embed 2");
-
-$embed3 = $dw->newEmbed()
-->setTitle("Embed 3");
-
-$embed2->send();
-$embed3->send();
+->setAuthor("Cool name", "author.php", "images/author-icon.png");
+# https://yourwebsite.com/author.php
+# https://yourwebsite.com/images/author-icon.png
+->setThumbnail("../thumbnail.png");
+# https://yourwebsite.com/thumbnail.png
+->setAvatar("bot_avatar.jpg");
+# https://yourwebsite.com/bot_avatar.jpg
 ```
 
 ## Methods
-— Set bot username
+> For the embed, please look at [DiscordEmbed-PHP](https://github.com/renzbobz/DiscordEmbed-PHP).
+
+### New message
+***$content** is optional.*
 ```php
-$dw->setUsername(<username>);
+->newMessage($content);
 ```
-— Set bot avatar
+### Send message
+***$webhook** and **$options** are optional.*
 ```php
-$dw->setAvatar(<avatar>);
+->send($webhook);
+# or
+->send($options);
 ```
-— Set webhook
+### Bot username
 ```php
-$dw->setWebhook(<webhook>);
+->setUsername($username);
 ```
-— Content
+### Bot avatar
 ```php
-$embed->setContent(<message>)
-->appendContent(<message>)
-->prependContent(<message>);
+->setAvatar($avatar);
 ```
-— Text to speech
+### Webhook
 ```php
-$embed->setTts(<tts:boolean>);
+->setWebhook($webhook);
 ```
-— Author
+### Content
 ```php
-$embed->setAuthor(<name>[, <url>[, <icon_url> ]]);
+->setContent($content);
+->appendContent($content);
+->prependContent($content);
 ```
-— Title
+### Text-to-speech
 ```php
-$embed->setTitle(<title>[, <url> ])
-->appendTitle(<title>)
-->prependTitle(<title>);
+->setTts($tts=false);
 ```
-— Description
+### Chain embeds
+***$index** is optional.*
 ```php
-$embed->setDescription(<description>)
-->appendDescription(<description>)
-->prependDescription(<description>);
+->insertTo($embed, $index);
 ```
-— Color
+### Files
+***$name** is optional.*
+
+*Splice file's **$files** is optional unless you want to insert some files.*
 ```php
-$embed->setColor([color]);
+->addFile($path, $name);
+->addFiles(...$files);
+->spliceFiles($startIndex, $deleteCount, ...$files);
 ```
-— Thumbnail
+### To Array
 ```php
-$embed->setThumbnail(<url>[, <height>[, <width> ]]);
+->toArray();
 ```
-— Image
+### To JSON
 ```php
-$embed->setImage(<url>[, <height>[, <width> ]]);
-```
-— Timestamp
-```php
-$embed->setTimestamp([timestamp]);
-```
-— Footer
-```php
-$embed->setFooter(<text>[, <icon_url> ]);
-```
-— Field
-```php
-$embed->addField(<name>, <value>[, <inline> ]);
-```
-— Send
-```php
-$embed->send([ <message|webhook> ][, <webhook|tts> ][, <tts> ]);
-```
-— Get Data
-```php
-$embed->getData();
-```
-— Send Multiple Embed
-```php
-$dw->sendMultiEmbed([webhook,]<embed>,<embed2>,...);
-```
-— Validate
-```php
-$dw->isDiscordWebhook(<url>);
+->toJSON();
 ```
 
-## Examples
+## More example
+#### Multiple files
+```php
+$msg = $dw->newMessage("Multiple files")
+  ->addFile("file0.txt", "Cool-name.txt")
+  ->addFile("file1.txt")
+  ->addFiles(
+    ["file2.txt"],
+    ["file3.txt"]
+  )
+  ->send();
+print_r($msg);
+```
+![Message with multiple files preview](images/image3.jpg)
+
+#### Multiple embeds
+```php
+$embed1 = $dw->newMessage()
+  ->setTitle("Embed 1")
+  ->setDescription("Embed 1 description")
+  ->setColor("RANDOM");
+  
+$embed2 = $dw->newMessage()
+  ->setTitle("Embed 2")
+  ->setDescription("Embed 2 description")
+  ->setColor("RANDOM")
+  ->insertTo($embed1);
+  
+$embed3 = $dw->newMessage()
+  ->setTitle("Embed 3")
+  ->setDescription("This must be inserted at index 0 because this is important.")
+  ->setColor("RANDOM")
+  ->insertTo($embed1, 0);
+  #                   ^
+  #                 index
+
+# $embed1 now contains three embed  
+$res = $embed1->send();
+print_r($res);
+```
+![Message with multiple embeds](images/image4.jpg)
+
+#### +
 ```php
 $icon = "https://www.seekpng.com/png/full/20-205511_discord-transparent-staff-discord-logo-black-and-white.png";
 $image = "https://discord.com/assets/f72fbed55baa5642d5a0348bab7d7226.png";
-$webhook = "WEBHOOK_URL";
 
-$dw = new DiscordWebhook("Discordy", $icon, $webhook);
+$dw->setUsername("Discordy");
+$dw->setAvatar($icon);
 
-$dw->newEmbed()
-->setContent("Content above the embed")
-->setTitle("Title of embed", "https://discordy.site")
-->setDescription("Description of embed")
-->setColor(1752220)
-->setTimestamp(date("c", time()))
-->setAuthor("Author name", "https://author.site", $icon)
+$dw->newMessage()
+->setContent("Cool content")
+->setTitle("Cool title", "https://discordy.site")
+->setDescription("Awesome description")
+->setColor("ffffff")
+->setTimestamp()
+->setAuthor("Discordyyy", "https://discordy.site", $icon)
 ->setImage($image)
 ->setThumbnail($icon)
-->setFooter("Footer text", $icon)
-->addField("Field 1", "field 1 value")
-->addField("Field 2", "field 2 value")
-->addField("Field 3", "field 3 value")
+->setFooter("Cool footer", $icon)
+->addField("Field 1", "val1")
+->addFields(
+  ["Field 2", "val2", true],
+  ["Field 3", "val3", true]
+)
+->addFile("file0.txt")
 ->send();
 ```
-
-![Preview](images/e1.jpg)
-
-
+![Embed preview](images/image5.jpg)
