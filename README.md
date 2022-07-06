@@ -3,10 +3,11 @@ Easily send a message to discord with embeds or files.
 
 Released: **3/18/21**
 
-Updated: **---**
+Updated: **7/6/22**
 
-
-> *With built in [DiscordEmbed-PHP](https://github.com/renzbobz/DiscordEmbed-PHP) for creating embed object easily :D*
+Changes:
+- Fixed bugs
+- Added thread support
 
 
 ## Getting started
@@ -23,12 +24,36 @@ $dw = new DiscordWebhook($options);
 ```
 #### Options
 
-| Name          | Property name   | Type       | Default  | Description                     |
-| ------------- |:---------------:|:----------:|:--------:| -------------------------------:|
-| username      | username        | string     |          | Bot name                        |
-| avatar        | avatar_url      | string     |          | Bot avatar url                  |
-| webhook       | webhook         | string     |          | Discord webhook url             |
-| wait_message  | wait_message    | boolean    | true     | Wait for message to be sent     |
+| Name          | Property name   | Type       | Default  | Description                                  |
+| ------------- |:---------------:|:----------:|:--------:| --------------------------------------------:|
+| username      | username        | string     |          | Bot name                                     |
+| avatar        | avatar_url      | string     |          | Bot avatar url                               |
+| webhook       | webhook         | string     |          | Discord webhook url                          |
+| wait_message  | wait_message    | boolean    | true     | Wait for message to be sent                  |
+| thread_id     | thread_id       | snowflake  |          | Sends the message to the specified thread    |
+| thread_name   | thread_name     | string     |          | Name of thread to create                     |
+
+## New
+### Create new thread
+*Same as creating a new message but this will create a new thread*
+```php
+$msg = $dw->newThread("Thread name")
+  ->setContent("Hello")
+  ->setTitle("Embed title");
+$res = $msg->send();
+```
+### Set Thread ID
+*Sends the message to the specified thread*
+```php
+$dw->setThreadID($threadId); // set as default
+# or
+$msg = $dw->newMessage("Hello")
+  ->setThreadID($threadId);
+# or
+$res = $msg->send([
+  "thread_id" => $threadId
+]);
+```
 
 ### Create new message
 #### Plain message
@@ -38,6 +63,8 @@ $msg = $dw->newMessage("Hello");
 $msg = $dw->newMessage()
   ->setContent("Hello");
 $res = $msg->send();
+# with options
+$res = $msg->send($options);
 ```
 ![Plain message preview](images/image0.jpg)
 #### With embed
@@ -49,7 +76,7 @@ $msg = $dw->newMessage()
 $res = $msg->send();
 ```
 ![Message with embed preview](images/image1.jpg)
-> For more information about the embed, please look at [DiscordEmbed-PHP](https://github.com/renzbobz/DiscordEmbed-PHP).
+> For more information about the embed, please look at [DiscordEmbed-PHP](https://github.com/renzbobz/DiscordEmbed-PHP)
 
 #### With file
 ```php
@@ -67,15 +94,15 @@ $res = $msg->send();
 ### Response object
 | Name       | Value        | Description                                                |
 | ---------- |:------------:|:----------------------------------------------------------:|
-| success    | boolean      | Return's true if response code is in range between 200-299 |
+| success    | boolean      | Returns true if response code is in range between 200-299  |
 | body       | string       | Response body                                              |
 | code       | number       | Response code                                              |
-| message    | object       | Return's the message object if successfully sent           |
+| message    | object       | Returns the message object if successfully sent            |
 
 
 You can also set the default values for your upcoming messages.
 ```php 
-$dw->setColor("ffffff");
+$dw->setColor("ffffff"); // set as default
 $msg = $dw->newMessage()
   ->setTitle("Cool title")
   ->setDescription("Cool description");
@@ -108,63 +135,89 @@ Example:
 ```
 
 ## Methods
-> For the embed, please look at [DiscordEmbed-PHP](https://github.com/renzbobz/DiscordEmbed-PHP).
+> For the embed, please look at [DiscordEmbed-PHP](https://github.com/renzbobz/DiscordEmbed-PHP)
 
+
+### New thread
+*Same as ->newMessage but this will create a new thread*
+***$name** is required.*
+```php
+$dw->newThread($name);
+```
+### Set thread ID
+*Send the message to the specified thread*
+```php
+$dw->setThreadID($id); // set as default
+$msg->setThreadID($id);
+```
 ### New message
+*Create a new message to send*
 ***$content** is optional.*
 ```php
-->newMessage($content);
+$dw->newMessage($content);
 ```
 ### Send message
+*Send the created message*
 ***$webhook** and **$options** are optional.*
 ```php
-->send($webhook);
+$msg->send($webhook);
 # or
-->send($options);
+$msg->send($options);
 ```
 ### Bot username
+*Set bot username*
 ```php
-->setUsername($username);
+$dw->setUsername($username);
 ```
 ### Bot avatar
+*Set bot avatar*
 ```php
-->setAvatar($avatar);
+$dw->setAvatar($avatar);
 ```
 ### Webhook
+*Set webhook*
 ```php
-->setWebhook($webhook);
+$dw->setWebhook($webhook);
+```
+### Wait Message
+```php
+$dw->waitMessage($wait=true); // set as default
+$msg->waitMessage($wait=true);
 ```
 ### Content
+*Set message content*
 ```php
-->setContent($content);
-->appendContent($content);
-->prependContent($content);
+$msg->setContent($content);
+$msg->appendContent($content);
+$msg->prependContent($content);
 ```
 ### Text-to-speech
+*Set message is text-to-speech*
 ```php
-->setTts($tts=false);
+$msg->setTts($tts=false);
 ```
 ### Chain embeds
+*Insert embed to another embed to create multiple embed*
 ***$index** is optional.*
 ```php
-->insertTo($embed, $index);
+$msg->insertTo($msg2, $index);
 ```
 ### Files
+*Set files*
 ***$name** is optional.*
-
 *Splice file's **$files** is optional unless you want to insert some files.*
 ```php
-->addFile($path, $name);
-->addFiles(...$files);
-->spliceFiles($startIndex, $deleteCount, ...$files);
+$msg->addFile($path, $name);
+$msg->addFiles(...$files);
+$msg->spliceFiles($startIndex, $deleteCount, ...$files);
 ```
 ### To Array
 ```php
-->toArray();
+$msg->toArray();
 ```
 ### To JSON
 ```php
-->toJSON();
+$msg->toJSON();
 ```
 
 ## More example
@@ -208,6 +261,37 @@ $res = $embed1->send();
 print_r($res);
 ```
 ![Message with multiple embeds](images/image4.jpg)
+
+#### New thread
+```php
+$msg = $dw->newThread("Thread name")
+  ->setContent("Hello")
+  ->setTitle("Embed title")
+  ->setDescription("Embed description");
+$res = $msg->send();
+```
+
+#### Send a message to a thread
+```php
+$msg = $dw->newMessage()
+  ->setContent("Hello")
+  ->setTitle("Embed title")
+  ->setDescription("Embed description")
+  ->setThreadID($id);
+$res = $msg->send();
+```
+
+#### Send method options
+```php
+$res = $msg->send([
+  "username" => $username, // set bot username
+  "avatar" => $avatar, // set bot avatar
+  "webhook" => $webhook, // set webhook
+  "wait_message" => true, // set to wait message
+  "thread_id" => $id, // set thread id to send the message to the thread
+  "thread_name" => $name // set thread name to create a new thread
+]);
+```
 
 #### +
 ```php
