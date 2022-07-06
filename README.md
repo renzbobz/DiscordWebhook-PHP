@@ -5,7 +5,7 @@ Released: **3/18/21**
 
 Updated: **7/6/22**
 
-Changes:
+**Changes**:
 - Fixed bugs
 - Added thread support
 
@@ -25,7 +25,7 @@ $dw = new DiscordWebhook($options);
 #### Options
 
 | Name          | Property name   | Type       | Default  | Description                                  |
-| ------------- |:---------------:|:----------:|:--------:| --------------------------------------------:|
+| ------------- |:---------------:|:----------:|:--------:| ---------------------------------------------|
 | username      | username        | string     |          | Bot name                                     |
 | avatar        | avatar_url      | string     |          | Bot avatar url                               |
 | webhook       | webhook         | string     |          | Discord webhook url                          |
@@ -93,7 +93,7 @@ $res = $msg->send();
 
 ### Response object
 | Name       | Value        | Description                                                |
-| ---------- |:------------:|:----------------------------------------------------------:|
+| ---------- |:------------:|------------------------------------------------------------|
 | success    | boolean      | Returns true if response code is in range between 200-299  |
 | body       | string       | Response body                                              |
 | code       | number       | Response code                                              |
@@ -140,6 +140,7 @@ Example:
 
 ### New thread
 *Same as ->newMessage but this will create a new thread*
+
 ***$name** is required.*
 ```php
 $dw->newThread($name);
@@ -152,12 +153,14 @@ $msg->setThreadID($id);
 ```
 ### New message
 *Create a new message to send*
+
 ***$content** is optional.*
 ```php
 $dw->newMessage($content);
 ```
 ### Send message
 *Send the created message*
+
 ***$webhook** and **$options** are optional.*
 ```php
 $msg->send($webhook);
@@ -204,7 +207,9 @@ $msg->insertTo($msg2, $index);
 ```
 ### Files
 *Set files*
+
 ***$name** is optional.*
+
 *Splice file's **$files** is optional unless you want to insert some files.*
 ```php
 $msg->addFile($path, $name);
