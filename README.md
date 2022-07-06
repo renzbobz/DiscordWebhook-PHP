@@ -201,6 +201,7 @@ $msg->setTts($tts=false);
 ```
 ### Chain embeds
 *Insert embed to another embed to create multiple embed*
+
 ***$index** is optional.*
 ```php
 $msg->insertTo($msg2, $index);
