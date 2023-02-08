@@ -108,7 +108,7 @@ $msg = $dw
 
 [More example](https://github.com/renzbobz/DiscordWebhook-PHP/tree/master/examples)
 
-### Response array
+### Response object
 
 | Name       |     Type      | Description                                                  |
 | ---------- | :-----------: | ------------------------------------------------------------ |
