@@ -419,7 +419,7 @@ class DiscordWebhook {
     $success = $code >= 200 && $code < 299;
     $body = $this->parseJSON ? $this->_silentJSONParse($res) : $res;
     
-    return [
+    return (object) [
       'success' => $success,
       'body' => $body,
       'code' => $code,
