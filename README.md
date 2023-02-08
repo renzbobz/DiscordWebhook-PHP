@@ -106,6 +106,8 @@ $msg = $dw
   ->send();
 ```
 
+- [More example](https://github.com/renzbobz/DiscordWebhook-PHP/tree/master/examples)
+
 ### Response object
 
 | Name       |     Type      | Description                                                  |
@@ -183,7 +185,7 @@ setTts(?bool $tts = true);
 #### Set Multiple Embed
 
 ```php
-addEmbed(object $embed, ?int $index = null);
+addEmbed(object $embed, ?int $index = null, ?bool $replace = false);
 ```
 
 #### Set Files
