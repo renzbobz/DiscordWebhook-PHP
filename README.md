@@ -108,12 +108,12 @@ $msg = $dw
 
 [More example](https://github.com/renzbobz/DiscordWebhook-PHP/tree/master/examples)
 
-### Response object
+### Response array
 
 | Name       |     Type      | Description                                                  |
 | ---------- | :-----------: | ------------------------------------------------------------ |
 | success    |    boolean    | Returns true if response code is in 2xx range                |
-| body       | string\|array | Response body (auto json parse, if parseJSON option is true) |
+| body       | string \| array | Response body (auto json parse, if parseJSON option is true) |
 | code       |      int      | Response code                                                |
 | curl_error |    string     | Curl error message                                           |
 
