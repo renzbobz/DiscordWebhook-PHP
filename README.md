@@ -140,7 +140,7 @@ setThreadId(snowflake $id);
 #### Send message
 
 ```php
-send(string $webhook, ?array $options);
+send(string $webhook);
 send(array $options);
 ```
 
