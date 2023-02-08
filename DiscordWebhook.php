@@ -29,10 +29,8 @@ class DiscordWebhook {
   public $embed = [];
   private $_offsetIndex = 0;
 
-  public function __construct($webhook, $opts=null) { 
-    if (is_string($webhook) && is_array($opts)) {
-      $opts = [ "webhook" => $webhook, ...$opts ];
-    }
+  public function __construct($webhook, $opts=[]) { 
+    $opts = $webhook && !$opts ? $webhook : [ "webhook" => $webhook, ...$opts ];
     $this->_setOpts($opts); 
   }
   public function toJSON() { return $this->_getData(); }
