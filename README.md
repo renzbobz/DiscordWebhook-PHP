@@ -366,18 +366,19 @@ setThumbnail(associative array $thumbnail);
 # Associative array
 $field = [
   "name" => string,
-  "value" => string,
+  "value" => ?string,
   "inline" => ?bool,
 ];
 # Indexed array
 $field = [
   string $name,
-  string $value,
+  ?string $value,
   ?bool $inline,
 ];
 ```
 
 ```php
-addField(string $name, string $value, ?bool $inline);
+addField(associative array $field);
+addField(string $name, ?string $value, ?bool $inline);
 addFields(associative|indexed array ...$fields)
 ```
