@@ -106,7 +106,7 @@ $msg = $dw
   ->send();
 ```
 
-- [More example](https://github.com/renzbobz/DiscordWebhook-PHP/tree/master/examples)
+[More example](https://github.com/renzbobz/DiscordWebhook-PHP/tree/master/examples)
 
 ### Response object
 
