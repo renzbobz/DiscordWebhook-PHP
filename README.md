@@ -249,7 +249,6 @@ setAllowedMentions(array $allowedMentionsObject);
 #### Formatting
 
 ```php
-toArray(): array;
 toJSON(): string;
 ```
 
