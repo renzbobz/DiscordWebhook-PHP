@@ -1,8 +1,8 @@
 # DiscordWebhook-PHP
 
-Easily send a message to discord with embeds or files.
+Easily send/delete/update a message to discord with embeds and/or files.
 
-Major Released: **2/8/23**
+Released: **2/9/23**
 
 ## Getting started
 
@@ -28,15 +28,15 @@ $dw = new DiscordWebhook($webhook, $options);
 
 #### Options
 
-| Name      |   Type    | Default | Description                     |
-| --------- | :-------: | :-----: | :------------------------------ |
-| username  |  string   |         | Bot name                        |
-| avatarUrl |  string   |         | Bot avatar url                  |
-| webhook   |  string   |         | Discord webhook url             |
-| wait      |  boolean  |  false  | Wait for message to be sent     |
-| threadId  | snowflake |         | Send the message to that thread |
-| parseJSON |  boolean  |  true   | Automatically json parse body   |
-| curlOpts  |   array   |         | Custom curl options             |
+| Name      |   Type    | Default | Description                                                      |
+| --------- | :-------: | :-----: | :--------------------------------------------------------------- |
+| username  |  string   |         | Bot name                                                         |
+| avatarUrl |  string   |         | Bot avatar url                                                   |
+| webhook   |  string   |         | Discord webhook url                                              |
+| wait      |  boolean  |  false  | Wait for message to be sent, returns a message object on success |
+| threadId  | snowflake |         | Send the message to that thread                                  |
+| parseJSON |  boolean  |  true   | Automatically json parse body                                    |
+| curlOpts  |   array   |         | Custom curl options                                              |
 
 ### Send plain message
 
@@ -106,16 +106,42 @@ $msg = $dw
   ->send();
 ```
 
+### Get and create new message instance
+
+```php
+$msg = $dw->getMessage($msgId, false); // only the message id is copied
+$msg2 = $dw->getMessage($msgId); // whole message is copied except for files
+$msg2
+  ->setContent("Content updated.")
+  ->send();
+```
+
+### Update and delete message
+
+```php
+# Required option: [ "wait" => true ];
+$msg = $dw
+  ->newMessage()
+  ->setContent("This message will be updated in 5 seconds.");
+$sendRes = $msg->send(); // If success, this will automatically set the message id for you, to use update/delete/get method flawlessly (wait option must be enabled to get the message object)
+sleep(5);
+$updateRes = $msg
+  ->setContent("Message updated. This message will be deleted in 5 seconds.")
+  ->update();
+sleep(5);
+$deleteRes = $msg->delete();
+```
+
 [More example](https://github.com/renzbobz/DiscordWebhook-PHP/tree/master/examples)
 
-### Response object
+### Response Object
 
-| Name       |     Type      | Description                                                  |
-| ---------- | :-----------: | ------------------------------------------------------------ |
-| success    |    boolean    | Returns true if response code is in 2xx range                |
+| Name       |      Type       | Description                                                  |
+| ---------- | :-------------: | ------------------------------------------------------------ |
+| success    |     boolean     | Returns true if response code is in 2xx range                |
 | body       | string \| array | Response body (auto json parse, if parseJSON option is true) |
-| code       |      int      | Response code                                                |
-| curl_error |    string     | Curl error message                                           |
+| code       |       int       | Response code                                                |
+| curl_error |     string      | Curl error message                                           |
 
 ## Methods
 
@@ -137,11 +163,47 @@ newThread(string $name);
 setThreadId(snowflake $id);
 ```
 
-#### Send message
+#### Set Message Id
 
 ```php
-send(string $webhook);
-send(array $options);
+setMessageId(snowflake $msgId);
+```
+
+#### Get and create new message
+
+`$copyMsg == true` ? Copy the whole message (including embeds,attachments,bot name/avatar,etc., except for files).
+
+`$copyMsg == false` ? Copy the message id only.
+
+```php
+getMessage(snowflake $msgId, ?bool $copyMsg = true);
+```
+
+#### Get message
+
+```php
+get(?snowflake $msgId): ResponseObject;
+```
+
+#### Send message
+
+If response is success and (wait option is enabled or message object is detected), this will automatically set the message id.
+
+```php
+send(?string $webhook): ResponseObject;
+send(?array $options): ResponseObject;
+```
+
+#### Update message
+
+```php
+update(?snowflake $msgId): ResponseObject;
+```
+
+#### Delete message
+
+```php
+delete(?snowflake $msgId): ResponseObject;
 ```
 
 #### Set Bot username
