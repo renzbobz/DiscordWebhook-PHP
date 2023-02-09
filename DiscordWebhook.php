@@ -4,7 +4,7 @@ class DiscordWebhook {
 
   # DiscordWebhook-PHP
   # github.com/renzbobz
-  # 2/8/23
+  # 2/9/23
 
   public $webhook = null;
   public $parseJSON = true;
@@ -27,6 +27,7 @@ class DiscordWebhook {
   
   public $files = [];
   public $embed = [];
+  public $messageId = null;
   private $_offsetIndex = 0;
 
   public function __construct($webhook, $opts=[]) { 
@@ -135,6 +136,86 @@ class DiscordWebhook {
     } else {
       throw new Exception("No file found with the id of ($id). Make sure you add the file first with the id of ($id).");
     }
+  }
+
+  private function _getWebhookMsgUrl($messageId=null) {
+    $messageId = $messageId ?? $this->_getMessageId();
+    $webhook = $this->_buildWebhookQuery($this->_getWebhook().'\/messages\/'.$messageId);
+    return $webhook;
+  }
+
+  private function _getMessageId() {
+    $messageId = $this->messageId;
+    if (!$messageId) throw new Exception("Message Id is Required.");
+    return $messageId;
+  }
+
+  private function _getPostCurlOpts() {
+    if ($this->files) {
+      $contentType = 'multipart/form-data';
+      $data = $this->_getFormData();
+    } else {
+      $contentType = "application/json";
+      $data = $this->_getData();
+    }
+    return [
+      CURLOPT_POSTFIELDS => $data,
+      CURLOPT_HTTPHEADER => [
+        'Content-type: '.$contentType
+      ]
+    ];
+  }
+
+  private function _getWebhook() {
+    $webhook = $this->webhook;
+    if (!$webhook) throw new Exception("Webhook is Required.");
+    return $webhook;
+  }
+
+  private function _buildWebhookQuery($webhook) {
+    $query = [];
+    if ($this->wait) $query['wait'] = true;
+    if ($this->threadId) $query['thread_id'] = $this->threadId;
+    if ($query) $webhook .= '?' . http_build_query($query);
+    return $webhook;
+  }
+
+  private function _buildCurlOpts($opts=[]) {
+    $defaultOpts = [
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_FOLLOWLOCATION => true,
+    ];
+    return $defaultOpts + $opts + $this->curlOpts;
+  }
+
+  private function _curlResHandler($ch, $body) {
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $success = $code >= 200 && $code < 299;
+    $curlErr = curl_error($ch);
+    
+    $res = [
+      'success' => $success,
+      'code' => $code,
+      'curl_error' => $curlErr,
+    ];
+
+    $parsedBody = $this->_silentJSONParse($body);
+
+    $res['body'] = $this->parseJSON ? $parsedBody : $body;
+
+    if ($success && isset($parsedBody['id'])) $this->messageId = $parsedBody['id'];
+    
+    return (object) $res;
+  }
+
+  private function _execCurl($url, $opts=[]) {
+    $ch = curl_init($url);
+
+    curl_setopt_array($ch, $opts);
+    $body = curl_exec($ch);
+    curl_close($ch);
+
+    return $this->_curlResHandler($ch, $body);
   }
 
   public function setWebhook($webhook) {
@@ -328,11 +409,18 @@ class DiscordWebhook {
 
   # Message attachments
   public function addAttachment($id, $filename=null) {
-    $snowflake = $this->_getFileSnowflakeById($id);
-    $this->attachments[] = is_array($id) ? $id : [
-      "id" => $snowflake,
-      "filename" => $filename,
-    ];
+    if (is_array($id)) {
+      $attachment = $id;
+      // if not is set size, then it's not direct arg data
+      if (!isset($attachment["size"])) $attachment["id"] = $this->_getFileSnowflakeById($attachment["id"]);
+    } else {
+      $snowflake = $this->_getFileSnowflakeById($id);
+      $attachment = [
+        "id" => $snowflake,
+        "filename" => $filename,
+      ];
+    }
+    $this->attachments[] = $attachment;
     return $this;
   }
   public function addAttachments(...$attachments) {
@@ -376,56 +464,98 @@ class DiscordWebhook {
     return $this;
   }
 
-  # Send Message
-  public function send($opts=null) {
+  public function setMessageId($messageId) {
+    $this->messageId = $messageId;
+    return $this;
+  }
 
-    $this->_setOpts($opts);
+  public function getMessage($messageId=null, $copyMsg=true) {
+    $webhook = $this->_getWebhookMsgUrl($messageId);
+    $curlOpts = $this->_buildCurlOpts();
+    $res = $this->_execCurl($webhook, $curlOpts);
 
-    if (!$this->webhook) throw new Exception("Webhook Required.");
-    if (!$this->content && !$this->embed && !$this->embeds && !$this->files) throw new Exception("You must provide a value for at least one of content, embeds, or files.");
-
-    $webhook = $this->webhook;
-
-    $curlOpts = [
-      CURLOPT_POST => true,
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_FOLLOWLOCATION => true,
-    ] + $this->curlOpts;
-
-    $query = [];
-    if ($this->wait) $query['wait'] = true;
-    if ($this->threadId) $query['thread_id'] = $this->threadId;
-    if ($query) $webhook .= '?' . http_build_query($query);
-
-    if ($this->files) {
-      $contentType = 'multipart/form-data';
-      $data = $this->_getFormData();
-    } else {
-      $contentType = "application/json";
-      $data = $this->_getData();
+    if ($res->success) {
+      [
+        'id' => $id,
+        'content' => $content,
+        'author' => $bot,
+        'embeds' => $embeds,
+        'content' => $content,
+        'flags' => $flag,
+        'tts' => $tts,
+        'attachments' => $attachments,
+      ] = $res->body;
+      $clone = $this->newMessage();
+      $clone->setMessageId($id);
+      if ($copyMsg) {
+        $clone
+          ->setContent($content)
+          ->setUsername($bot['username'])
+          ->setTts($tts)
+          ->setFlag($flag);
+        $avatar = $bot['avatar'] ?? '';
+        $avatarUrl = 'https://cdn.discordapp.com/avatars/'.$bot["id"].'/'.$avatar.'.png';
+        if ($avatar) $clone->setAvatar($avatarUrl);
+        if ($attachments) $clone->addAttachments(...$attachments);
+        if ($embeds) {
+          $mainEmbed = array_splice($embeds, 0, 1);
+          // $i+1? index 0 is for main embed
+          foreach ($embeds as $i => $embed) $clone->embeds[$i+1] = $embed;
+          if ($mainEmbed) {
+            $e = $mainEmbed[0];
+            if (isset($e['url'])) $clone->setUrl($e['url']);
+            if (isset($e['title'])) $clone->setTitle($e['title']);
+            if (isset($e['description'])) $clone->setDescription($e['description']);
+            if (isset($e['color'])) $clone->setColor($e['color']);
+            if (isset($e['timestamp'])) $clone->setTimestamp($e['timestamp']);
+            if (isset($e['author'])) $clone->setAuthor($e['author']);
+            if (isset($e['image'])) $clone->setImage($e['image']);
+            if (isset($e['thumbnail'])) $clone->setThumbnail($e['thumbnail']);
+            if (isset($e['footer'])) $clone->setFooter($e['footer']);
+            if (isset($e['fields'])) $clone->addFields(...$e['fields']);
+          }
+        }
+      }
     }
 
-    $curlOpts[CURLOPT_POSTFIELDS] = $data;
-    $curlOpts[CURLOPT_HTTPHEADER][] = 'Content-type: '.$contentType;
+    return $clone ?? null;
+  }
 
-    $ch = curl_init($webhook);
+  public function get($messageId=null) {
+    $webhook = $this->_getWebhookMsgUrl($messageId);
 
-    curl_setopt_array($ch, $curlOpts);
-    $res = curl_exec($ch);
-    curl_close($ch);
-    
-    $curlErr = curl_error($ch);
-    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $success = $code >= 200 && $code < 299;
-    $body = $this->parseJSON ? $this->_silentJSONParse($res) : $res;
-    
-    return (object) [
-      'success' => $success,
-      'body' => $body,
-      'code' => $code,
-      'curl_error' => $curlErr,
-    ];
+    $curlOpts = $this->_buildCurlOpts();
 
+    return $this->_execCurl($webhook, $curlOpts);
+  }
+
+  public function delete($messageId=null) {
+    $webhook = $this->_getWebhookMsgUrl($messageId);
+
+    $curlOpts = $this->_buildCurlOpts([
+      CURLOPT_CUSTOMREQUEST => 'DELETE',
+    ]);
+
+    return $this->_execCurl($webhook, $curlOpts);
+  }
+
+  public function update($messageId=null) {
+    $webhook = $this->_getWebhookMsgUrl($messageId);
+
+    $curlOpts = $this->_buildCurlOpts([ CURLOPT_CUSTOMREQUEST => 'PATCH' ] + $this->_getPostCurlOpts());
+
+    return $this->_execCurl($webhook, $curlOpts);
+  }
+
+  public function send($opts=null) {
+    $this->_setOpts($opts);
+
+    $webhook = $this->_buildWebhookQuery($this->_getWebhook());
+
+    if (!$this->content && !$this->embed && !$this->embeds && !$this->files) throw new Exception("You must provide a value for at least one of content, embeds, or files.");
+    $curlOpts = $this->_buildCurlOpts([ CURLOPT_POST => true ] + $this->_getPostCurlOpts());
+
+    return $this->_execCurl($webhook, $curlOpts);
   }
 
 }
