@@ -2,8 +2,6 @@
 
 Easily send/delete/update a message to discord with embeds and/or files.
 
-Released: **2/9/23**
-
 ## Getting started
 
 ### Installation
