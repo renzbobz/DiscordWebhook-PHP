@@ -99,12 +99,12 @@ class DiscordWebhook {
       "username" => $this->username,
       "avatar_url" => $this->avatarUrl,
       "tts" => $this->tts,
-      "allowed_mentions" => $this->allowedMentions,
       "flags" => $this->flags,
       "embeds" => $embeds,
       "attachments" => $this->attachments,
       "thread_name" => $this->threadName,
     ];
+    if ($this->allowedMentions) $data["allowed_mentions"] = $this->allowedMentions;
     return json_encode($data);
   }
 
